@@ -44,15 +44,18 @@ namespace WebApplication3.Services
             _dbContext.SaveChanges();
             return restaurant.Id;
         }
-        public void DeleteById (int id)
+        public bool DeleteById (int id)
         {
             var restaurant = _dbContext
                 .Restaurants
-                .Where(r => r.Id == id)
-                .ExecuteDelete();
+                .FirstOrDefault(r => r.Id == id);
+                if (restaurant == null)
+            {
+                return false;
+            }
 
             _dbContext .SaveChanges();
-              
+            return true;
         }
     }
 }

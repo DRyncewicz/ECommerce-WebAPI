@@ -10,13 +10,14 @@ namespace WebApplication3.Controllers
     [Route("api/restaurant")]
     public class RestaurantController : Controller
     {
+
         private readonly IRestaurantService _service;
 
         public RestaurantController(IRestaurantService service)
         {
-
             _service = service;
         }
+
         [HttpGet]
         public ActionResult<IEnumerable<RestaurantDto>> GetAll()
         {
@@ -42,16 +43,16 @@ namespace WebApplication3.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var Id = _service.CreateNew(dto);
 
+            var Id = _service.CreateNew(dto);
             return Created($"/api/restaurant/{Id}", null);
         }
 
         [HttpDelete("{id}")]
         public ActionResult DeleteRestaurant([FromRoute]int id)
         {
-            _service.DeleteById(id);    
-            return Ok();
+            bool isDeleted = _service.DeleteById(id);    
+            return isDeleted? Ok() : NotFound();
         }
     }
 }
