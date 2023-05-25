@@ -1,7 +1,7 @@
 using WebApplication3.Data;
 using WebApplication3.Entities;
 using WebApplication3.Mapper;
-
+using WebApplication3.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<RestaurantDbContext>();
 builder.Services.AddScoped<RestaurantSeeder>();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.AddScoped<IRestaurantService, RestaurantService>();
 var app = builder.Build();
 
 
