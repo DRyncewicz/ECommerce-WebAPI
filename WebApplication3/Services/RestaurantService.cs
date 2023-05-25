@@ -54,7 +54,24 @@ namespace WebApplication3.Services
                 return false;
             }
 
-            _dbContext .SaveChanges();
+            _dbContext.Remove(restaurant);
+            _dbContext.SaveChanges();
+            return true;
+        }
+
+        public bool Update(RestaurantUpdateDto dto, int id)
+        {
+            var restaurant = _dbContext
+                .Restaurants
+                .FirstOrDefault (r => r.Id == id);
+
+            if (restaurant == null)
+            {
+                return false;
+            }
+            _dbContext.Entry(restaurant).CurrentValues.SetValues(dto);
+            _dbContext.SaveChanges();
+
             return true;
         }
     }

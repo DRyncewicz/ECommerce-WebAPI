@@ -54,5 +54,12 @@ namespace WebApplication3.Controllers
             bool isDeleted = _service.DeleteById(id);    
             return isDeleted? Ok() : NotFound();
         }
+
+        [HttpPut("{id}")]
+        public ActionResult UpdateRestaurant([FromBody]RestaurantUpdateDto dto,[FromRoute] int id)
+        {
+            bool isDeleted = _service.Update(dto, id);
+            return isDeleted ? Ok() : NotFound();
+        }
     }
 }
