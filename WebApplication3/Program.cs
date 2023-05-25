@@ -1,7 +1,12 @@
+using NLog;
+using NLog.Web;
 using WebApplication3.Data;
 using WebApplication3.Entities;
 using WebApplication3.Mapper;
 using WebApplication3.Services;
+
+var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+logger.Debug("init main");
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +16,10 @@ builder.Services.AddDbContext<RestaurantDbContext>();
 builder.Services.AddScoped<RestaurantSeeder>();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<IRestaurantService, RestaurantService>();
+builder.Logging.ClearProviders();
+builder.Host.UseNLog();
+
+
 var app = builder.Build();
 
 
@@ -28,5 +37,6 @@ using (var scope = app.Services.CreateScope())
 
     // Call the Seed method on the seeder instance
     seeder.Seed();
+    
 }
 app.Run();
