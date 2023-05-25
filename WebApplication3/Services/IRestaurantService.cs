@@ -9,6 +9,6 @@ namespace WebApplication3.Services
 
         public int CreateNew(CreateRestaurantDto dto);
 
-
+        public void DeleteById(int id);
     }
 }

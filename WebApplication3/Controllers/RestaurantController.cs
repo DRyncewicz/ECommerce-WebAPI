@@ -42,9 +42,16 @@ namespace WebApplication3.Controllers
             {
                 return BadRequest(ModelState);
             }
-            int restaurantId = _service.CreateNew(dto);
+            var Id = _service.CreateNew(dto);
 
-            return Created($"/api/restaurant/{restaurantId}", null);
+            return Created($"/api/restaurant/{Id}", null);
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult DeleteRestaurant([FromRoute]int id)
+        {
+            _service.DeleteById(id);    
+            return Ok();
         }
     }
 }

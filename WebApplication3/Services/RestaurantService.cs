@@ -42,8 +42,17 @@ namespace WebApplication3.Services
             var restaurant = _mapper.Map<Restaurant>(dto);
             _dbContext.Restaurants.Add(restaurant);
             _dbContext.SaveChanges();
-
             return restaurant.Id;
+        }
+        public void DeleteById (int id)
+        {
+            var restaurant = _dbContext
+                .Restaurants
+                .Where(r => r.Id == id)
+                .ExecuteDelete();
+
+            _dbContext .SaveChanges();
+              
         }
     }
 }
