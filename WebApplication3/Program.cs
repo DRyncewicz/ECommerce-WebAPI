@@ -20,6 +20,7 @@ builder.Services.AddScoped<IRestaurantService, RestaurantService>();
 builder.Logging.ClearProviders();
 builder.Host.UseNLog();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
+builder.Services.AddScoped<RequestTimeMiddleware>();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
@@ -27,6 +28,7 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.UseMiddleware<ErrorHandlingMiddleware>();
+app.UseMiddleware<RequestTimeMiddleware>();
 app.UseHttpsRedirection();
 app.UseSwagger();
 app.UseSwaggerUI(c =>
