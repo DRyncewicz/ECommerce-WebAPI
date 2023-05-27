@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 using WebApplication3.Entities;
+using WebApplication3.Exceptions;
 using WebApplication3.Models;
 
 namespace WebApplication3.Services
@@ -24,7 +26,10 @@ namespace WebApplication3.Services
                 .Include(r => r.Address)
                 .Include(r => r.Dishes)
                 .FirstOrDefault(r => r.Id == id);
-
+            if (restaurant == null)
+            {
+                throw new NotFoundException("Restaurant not found");
+            }
             var restaurantDto = _mapper.Map<RestaurantDto>(restaurant);
             return restaurantDto;
         }
@@ -35,8 +40,8 @@ namespace WebApplication3.Services
                .Include(r => r.Address)
                .Include(r => r.Dishes)
                .ToList();
-
             var restaurantsDtos = _mapper.Map<List<RestaurantDto>>(restaurants);
+
             return restaurantsDtos;
         }
 
@@ -47,7 +52,7 @@ namespace WebApplication3.Services
             _dbContext.SaveChanges();
             return restaurant.Id;
         }
-        public bool DeleteById (int id)
+        public void DeleteById (int id)
         {
             _logger.LogError($"Restaurant with id: {id} DELETE action invoked");
 
@@ -56,15 +61,15 @@ namespace WebApplication3.Services
                 .FirstOrDefault(r => r.Id == id);
                 if (restaurant == null)
             {
-                return false;
+                throw new NotFoundException("Restaurant not found");
             }
 
             _dbContext.Remove(restaurant);
             _dbContext.SaveChanges();
-            return true;
+
         }
 
-        public bool Update(RestaurantUpdateDto dto, int id)
+        public void Update(RestaurantUpdateDto dto, int id)
         {
             var restaurant = _dbContext
                 .Restaurants
@@ -72,12 +77,11 @@ namespace WebApplication3.Services
 
             if (restaurant == null)
             {
-                return false;
+                throw new NotFoundException("Restaurant not found");
             }
             _dbContext.Entry(restaurant).CurrentValues.SetValues(dto);
             _dbContext.SaveChanges();
 
-            return true;
         }
     }
 }

@@ -8,6 +8,7 @@ using WebApplication3.Services;
 namespace WebApplication3.Controllers
 {
     [Route("api/restaurant")]
+    [ApiController]
     public class RestaurantController : Controller
     {
 
@@ -29,21 +30,12 @@ namespace WebApplication3.Controllers
         public ActionResult<RestaurantDto> Get([FromRoute]int id)
         {
             var restaurantDto = _service.GetById(id);
-            if (restaurantDto == null)
-            {
-                return NotFound();
-            }
             return Ok(restaurantDto);
         }
 
         [HttpPost]
         public ActionResult CreateRestaurant([FromBody]CreateRestaurantDto dto)
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var Id = _service.CreateNew(dto);
             return Created($"/api/restaurant/{Id}", null);
         }
@@ -51,15 +43,16 @@ namespace WebApplication3.Controllers
         [HttpDelete("{id}")]
         public ActionResult DeleteRestaurant([FromRoute]int id)
         {
-            bool isDeleted = _service.DeleteById(id);    
-            return isDeleted? Ok() : NotFound();
+            _service.DeleteById(id);
+            return Ok();
+
         }
 
         [HttpPut("{id}")]
         public ActionResult UpdateRestaurant([FromBody]RestaurantUpdateDto dto,[FromRoute] int id)
         {
-            bool isDeleted = _service.Update(dto, id);
-            return isDeleted ? Ok() : NotFound();
+           _service.Update(dto, id);
+            return Ok();
         }
     }
 }

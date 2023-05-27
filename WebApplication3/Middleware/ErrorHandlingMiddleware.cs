@@ -1,4 +1,7 @@
-﻿namespace WebApplication3.Middleware
+﻿using Microsoft.AspNetCore.Http;
+using WebApplication3.Exceptions;
+
+namespace WebApplication3.Middleware
 {
     public class ErrorHandlingMiddleware : IMiddleware
     {
@@ -14,12 +17,19 @@
             {
                 await next.Invoke(context);
             }
+
+            catch (NotFoundException notFoundException)
+            {
+                context.Response.StatusCode = 404;
+                await context.Response.WriteAsync(notFoundException.Message);
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
                 context.Response.StatusCode = 500;
                 await context.Response.WriteAsync("Something went wrong");
             }
+
         }
     }
 }

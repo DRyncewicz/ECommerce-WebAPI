@@ -20,6 +20,7 @@ builder.Services.AddScoped<IRestaurantService, RestaurantService>();
 builder.Logging.ClearProviders();
 builder.Host.UseNLog();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -27,7 +28,11 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseHttpsRedirection();
-
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Restaurant API");
+});
 app.UseAuthorization();
 
 app.MapControllers();
