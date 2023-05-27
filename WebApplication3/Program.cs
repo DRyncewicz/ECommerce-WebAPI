@@ -3,6 +3,7 @@ using NLog.Web;
 using WebApplication3.Data;
 using WebApplication3.Entities;
 using WebApplication3.Mapper;
+using WebApplication3.Middleware;
 using WebApplication3.Services;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
@@ -18,13 +19,13 @@ builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<IRestaurantService, RestaurantService>();
 builder.Logging.ClearProviders();
 builder.Host.UseNLog();
-
+builder.Services.AddScoped<ErrorHandlingMiddleware>();
 
 var app = builder.Build();
 
 
 // Configure the HTTP request pipeline.
-
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
