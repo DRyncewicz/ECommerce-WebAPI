@@ -34,5 +34,17 @@ namespace WebApplication3.Controllers
             var dishes = _service.GetAll(restaurantId);
             return Ok(dishes);
         }
+        [HttpDelete("{dishId}")]
+        public ActionResult DeleteById(int restaurantId, int dishId)
+        {
+            _service.DeleteById(restaurantId, dishId);
+            return Ok();
+        }
+        [HttpDelete]
+        public ActionResult DeleteAll(int restaurantId)
+        {
+            _service.Delete(restaurantId);
+            return NoContent();
+        }
     }
 }
