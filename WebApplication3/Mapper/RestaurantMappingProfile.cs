@@ -15,8 +15,12 @@ namespace WebApplication3.Mapper
 
             CreateMap<Dish, DishDto>();
 
+            CreateMap<RegisterUserDto, User>();
+
             CreateMap<Restaurant, RestaurantUpdateDto>();
+
             CreateMap<CreateDishDto, Dish>();
+
             CreateMap<CreateRestaurantDto, Restaurant>()
                 .ForMember(m => m.Address, c => c.MapFrom(dto => new Address() {City = dto.City, PostalCode = dto.PostalCode, Street = dto.Street }));
         }
