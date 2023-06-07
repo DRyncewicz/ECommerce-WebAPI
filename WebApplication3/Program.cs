@@ -39,6 +39,10 @@ builder.Services.AddAuthentication(option =>
     };
 });
 // Add services to the container.
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("HasNationality", builder => builder.RequireClaim("Nationality", "Poland"));
+});
 builder.Services.AddControllers().AddFluentValidation();
 builder.Services.AddDbContext<RestaurantDbContext>();
 builder.Services.AddScoped<RestaurantSeeder>();
